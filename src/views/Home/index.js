@@ -43,6 +43,16 @@ function Home() {
     handleOpenEditModal();
   };
 
+  const handleEventPropGetter = event => {
+    const backgroundColor = event.color;
+    const style = {
+      backgroundColor: backgroundColor
+    };
+    return {
+      style
+    };
+  };
+
   return (
     <HomeContainer>
       <CreateEvent />
@@ -64,6 +74,7 @@ function Home() {
         defaultView={BigCalendar.Views.MONTH}
         scrollToTime={new Date(1970, 1, 1, 6)}
         onSelectEvent={handleSelectEvent}
+        eventPropGetter={handleEventPropGetter}
       />
     </HomeContainer>
   );

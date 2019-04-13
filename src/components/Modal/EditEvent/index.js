@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Modal from "react-modal";
 import DatePicker from "react-datepicker";
+import Select from "react-select";
 
 import "../../../styles/react-datepicker.css";
 
@@ -9,17 +10,17 @@ import EventContext from "../../../context/EventContext";
 
 import { customStyles } from "../style";
 
+import { colorOptions, useFormInput } from "../";
+
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement("#root");
 
 function EditModal({ eventSelected }) {
   const { editModalIsOpen, handleCloseEditModal } = useContext(ModalContext);
-
   const { handleEditEvent, handleDeleteEvent } = useContext(EventContext);
 
   const title = useFormInput("");
-
-  const color = useFormInput("");
+  const [color, setColor] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -36,7 +37,8 @@ function EditModal({ eventSelected }) {
         <input {...title} placeholder="New Title" />
         <br />
         <label>Color ({eventSelected && eventSelected.color}): </label>
-        <input {...color} placeholder="New Color" />
+        <Select value={color} onChange={setColor} options={colorOptions} />
+
         <br />
         <label>
           Start Date ({eventSelected && eventSelected.start.toString()}):
@@ -66,14 +68,6 @@ function EditModal({ eventSelected }) {
         <div style={{ marginTop: "1rem" }}>
           <button
             onClick={() => {
-              handleDeleteEvent(eventSelected);
-              handleCloseEditModal();
-            }}
-          >
-            Delete Event
-          </button>
-          <button
-            onClick={() => {
               handleEditEvent(eventSelected, {
                 title: title.value ? title.value : eventSelected.title,
                 color: color.value ? color.value : eventSelected.color,
@@ -86,24 +80,20 @@ function EditModal({ eventSelected }) {
           >
             Edit Event
           </button>
+          <button
+            style={{ margin: "0 1rem" }}
+            onClick={() => {
+              handleDeleteEvent(eventSelected);
+              handleCloseEditModal();
+            }}
+          >
+            Delete Event
+          </button>
           <button onClick={handleCloseEditModal}>Close modal</button>
         </div>
       </form>
     </Modal>
   );
-}
-
-function useFormInput(initialValue) {
-  const [value, setValue] = useState(initialValue);
-
-  function handleChange(e) {
-    setValue(e.target.value);
-  }
-
-  return {
-    value,
-    onChange: handleChange
-  };
 }
 
 export default EditModal;

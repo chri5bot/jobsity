@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
 import Modal from "react-modal";
 import DatePicker from "react-datepicker";
+import Select from "react-select";
 
 import "../../../styles/react-datepicker.css";
 import { customStyles } from "../style";
 import ModalContext from "../../../context/ModalContext";
 import EventContext from "../../../context/EventContext";
+
+import { colorOptions, useFormInput } from "../";
 
 Modal.setAppElement("#root");
 
@@ -14,7 +17,7 @@ function CustomModal() {
   const { handleAddEvent } = useContext(EventContext);
 
   const title = useFormInput("");
-  const color = useFormInput("");
+  const [color, setColor] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -31,7 +34,7 @@ function CustomModal() {
         <input {...title} placeholder="Title" />
         <br />
         <label>Color: </label>
-        <input {...color} placeholder="Color" />
+        <Select value={color} onChange={setColor} options={colorOptions} />
         <br />
         <label>Start Date: </label>
         <DatePicker
@@ -56,7 +59,7 @@ function CustomModal() {
         />
         <div style={{ marginTop: "1rem" }}>
           <button
-            disabled={!title.value || !color.value}
+            disabled={!title.value || !color}
             onClick={() => {
               if (!title.value || !color.value) {
                 return;
@@ -65,7 +68,8 @@ function CustomModal() {
               handleAddEvent({
                 start: startDate,
                 end: endDate,
-                title: title.value
+                title: title.value,
+                color: color.value
               });
 
               handleCloseModal();
@@ -78,19 +82,6 @@ function CustomModal() {
       </form>
     </Modal>
   );
-}
-
-function useFormInput(initialValue) {
-  const [value, setValue] = useState(initialValue);
-
-  function handleChange(e) {
-    setValue(e.target.value);
-  }
-
-  return {
-    value,
-    onChange: handleChange
-  };
 }
 
 export default CustomModal;

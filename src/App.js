@@ -48,8 +48,8 @@ function App() {
   };
 
   const handleDeleteEvents = () => {
+    setEvents([]);
     window.localStorage.clear();
-    window.location.reload();
   };
 
   const handleEditEvent = (lastEvent, newEvent) => {
