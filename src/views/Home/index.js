@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import BigCalendar from "react-big-calendar";
 import moment from "moment";
 
-import Modal from "../../components/Modal";
+import CreateEvent from "../../components/Modal/CreateEvent";
+import EditEvent from "../../components/Modal/EditEvent";
 import EventContext from "../../context/EventContext";
 import ModalContext from "../../context/ModalContext";
 
@@ -21,7 +22,9 @@ function Home() {
     EventContext
   );
 
-  const { handleOpenModal } = useContext(ModalContext);
+  const { handleOpenModal, handleOpenEditModal } = useContext(ModalContext);
+
+  const [eventSelected, setEventSelected] = useState();
 
   const handleSelectSlot = ({ start, end }) => {
     const title = window.prompt("New Event name");
@@ -35,9 +38,15 @@ function Home() {
     }
   };
 
+  const handleSelectEvent = event => {
+    setEventSelected(event);
+    handleOpenEditModal();
+  };
+
   return (
     <HomeContainer>
-      <Modal />
+      <CreateEvent />
+      <EditEvent eventSelected={eventSelected} />
       <ButtonsContainer>
         <AddEventButton onClick={handleOpenModal}>Add Event</AddEventButton>
         <DeleteEventsButton onClick={handleDeleteEvents}>
@@ -54,7 +63,7 @@ function Home() {
         views={{ month: true, week: true }}
         defaultView={BigCalendar.Views.MONTH}
         scrollToTime={new Date(1970, 1, 1, 6)}
-        onSelectEvent={event => alert(event.title)}
+        onSelectEvent={handleSelectEvent}
       />
     </HomeContainer>
   );

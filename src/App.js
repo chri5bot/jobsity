@@ -7,6 +7,7 @@ import EventContext from "./context/EventContext";
 
 function App() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
   const initialEvents = JSON.parse(
     window.localStorage.getItem("events") || "[]"
@@ -30,6 +31,14 @@ function App() {
     setModalIsOpen(false);
   };
 
+  const handleOpenEditModal = () => {
+    setEditModalIsOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalIsOpen(false);
+  };
+
   const handleAddEvent = event => {
     const newEvents = [...events, event];
 
@@ -42,15 +51,34 @@ function App() {
     window.localStorage.clear();
     window.location.reload();
   };
+
+  const handleEditEvent = (lastevent, newEvent) => {
+    let newEvents = events.filter(ev => ev !== lastevent);
+
+    newEvents = [...newEvents, newEvent];
+
+    setEvents(newEvents);
+
+    window.localStorage.setItem("events", JSON.stringify(newEvents));
+  };
+
   return (
     <ModalContext.Provider
-      value={{ modalIsOpen, handleOpenModal, handleCloseModal }}
+      value={{
+        modalIsOpen,
+        handleOpenModal,
+        handleCloseModal,
+        editModalIsOpen,
+        handleOpenEditModal,
+        handleCloseEditModal
+      }}
     >
       <EventContext.Provider
         value={{
           events,
           handleAddEvent,
-          handleDeleteEvents
+          handleDeleteEvents,
+          handleEditEvent
         }}
       >
         <GlobalStyle />

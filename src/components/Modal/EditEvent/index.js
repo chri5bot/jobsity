@@ -2,53 +2,45 @@ import React, { useContext, useState } from "react";
 import Modal from "react-modal";
 import DatePicker from "react-datepicker";
 
-import "../../styles/react-datepicker.css";
+import "../../../styles/react-datepicker.css";
 
-import ModalContext from "../../context/ModalContext";
-import EventContext from "../../context/EventContext";
+import ModalContext from "../../../context/ModalContext";
+import EventContext from "../../../context/EventContext";
 
-const customStyles = {
-  content: {
-    top: "30%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    height: "500px",
-    width: "500px",
-    zIndex: "9999"
-  }
-};
+import { customStyles } from "../style";
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement("#root");
 
-function CustomModal() {
-  const { modalIsOpen, handleCloseModal } = useContext(ModalContext);
-  const { handleAddEvent } = useContext(EventContext);
+function EditModal({ eventSelected }) {
+  const { editModalIsOpen, handleCloseEditModal } = useContext(ModalContext);
+
+  const { handleEditEvent } = useContext(EventContext);
 
   const title = useFormInput("");
+
   const color = useFormInput("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
   return (
     <Modal
-      isOpen={modalIsOpen}
-      contentLabel="Insert your event"
+      isOpen={editModalIsOpen}
+      contentLabel="Edit your event"
       overlayClassName="Overlay"
       style={customStyles}
     >
-      <div>Insert your event</div>
+      <div>Edit this event</div>
       <form style={{ display: "flex", flexDirection: "column" }}>
-        <label>Title: </label>
-        <input {...title} />
+        <label>Title ({eventSelected && eventSelected.title}): </label>
+        <input {...title} placeholder="New Title" />
         <br />
-        <label>Color: </label>
-        <input {...color} />
+        <label>Color ({eventSelected && eventSelected.color}): </label>
+        <input {...color} placeholder="New Color" />
         <br />
-        <label>Start Date: </label>
+        <label>
+          Start Date ({eventSelected && eventSelected.start.toString()}):
+        </label>
         <DatePicker
           selected={startDate}
           onChange={setStartDate}
@@ -59,7 +51,9 @@ function CustomModal() {
           timeCaption="time"
         />
         <br />
-        <label>End Date: </label>
+        <label>
+          End Date ({eventSelected && eventSelected.end.toString()}):
+        </label>
         <DatePicker
           selected={endDate}
           onChange={setEndDate}
@@ -71,24 +65,20 @@ function CustomModal() {
         />
         <div style={{ marginTop: "1rem" }}>
           <button
-            disabled={!title.value || !color.value}
             onClick={() => {
-              if (!title.value || !color.value) {
-                return;
-              }
-
-              handleAddEvent({
-                start: startDate,
-                end: endDate,
-                title: title.value
+              handleEditEvent(eventSelected, {
+                title: title.value ? title.value : eventSelected.title,
+                color: color.value ? color.value : eventSelected.color,
+                start: startDate ? startDate : eventSelected.start,
+                end: endDate ? endDate : eventSelected.end
               });
 
-              handleCloseModal();
+              handleCloseEditModal();
             }}
           >
             Save Event
           </button>
-          <button onClick={handleCloseModal}>close modal</button>
+          <button onClick={handleCloseEditModal}>close modal</button>
         </div>
       </form>
     </Modal>
@@ -108,4 +98,4 @@ function useFormInput(initialValue) {
   };
 }
 
-export default CustomModal;
+export default EditModal;
