@@ -3,7 +3,11 @@ import BigCalendar from "react-big-calendar";
 import moment from "moment";
 
 import "../../styles/react-big-calendar.css";
-import { HomeContainer } from "./style";
+import {
+  HomeContainer,
+  DeleteButtonContainer,
+  DeleteEventsButton
+} from "./style";
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
@@ -30,8 +34,18 @@ function Home() {
       window.localStorage.setItem("events", JSON.stringify(newEvents));
     }
   };
+
+  const handleDeleteEvents = () => {
+    window.localStorage.clear();
+    window.location.reload();
+  };
   return (
     <HomeContainer>
+      <DeleteButtonContainer>
+        <DeleteEventsButton onClick={handleDeleteEvents}>
+          Delete Events
+        </DeleteEventsButton>
+      </DeleteButtonContainer>
       <BigCalendar
         popup
         selectable
