@@ -52,10 +52,18 @@ function App() {
     window.location.reload();
   };
 
-  const handleEditEvent = (lastevent, newEvent) => {
-    let newEvents = events.filter(ev => ev !== lastevent);
+  const handleEditEvent = (lastEvent, newEvent) => {
+    let newEvents = events.filter(ev => ev !== lastEvent);
 
     newEvents = [...newEvents, newEvent];
+
+    setEvents(newEvents);
+
+    window.localStorage.setItem("events", JSON.stringify(newEvents));
+  };
+
+  const handleDeleteEvent = lastEvent => {
+    let newEvents = events.filter(ev => ev !== lastEvent);
 
     setEvents(newEvents);
 
@@ -78,7 +86,8 @@ function App() {
           events,
           handleAddEvent,
           handleDeleteEvents,
-          handleEditEvent
+          handleEditEvent,
+          handleDeleteEvent
         }}
       >
         <GlobalStyle />

@@ -73,7 +73,7 @@ function CustomModal() {
           >
             Save Event
           </button>
-          <button onClick={handleCloseModal}>close modal</button>
+          <button onClick={handleCloseModal}>Close modal</button>
         </div>
       </form>
     </Modal>

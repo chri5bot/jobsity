@@ -15,7 +15,7 @@ Modal.setAppElement("#root");
 function EditModal({ eventSelected }) {
   const { editModalIsOpen, handleCloseEditModal } = useContext(ModalContext);
 
-  const { handleEditEvent } = useContext(EventContext);
+  const { handleEditEvent, handleDeleteEvent } = useContext(EventContext);
 
   const title = useFormInput("");
 
@@ -66,6 +66,14 @@ function EditModal({ eventSelected }) {
         <div style={{ marginTop: "1rem" }}>
           <button
             onClick={() => {
+              handleDeleteEvent(eventSelected);
+              handleCloseEditModal();
+            }}
+          >
+            Delete Event
+          </button>
+          <button
+            onClick={() => {
               handleEditEvent(eventSelected, {
                 title: title.value ? title.value : eventSelected.title,
                 color: color.value ? color.value : eventSelected.color,
@@ -76,9 +84,9 @@ function EditModal({ eventSelected }) {
               handleCloseEditModal();
             }}
           >
-            Save Event
+            Edit Event
           </button>
-          <button onClick={handleCloseEditModal}>close modal</button>
+          <button onClick={handleCloseEditModal}>Close modal</button>
         </div>
       </form>
     </Modal>
