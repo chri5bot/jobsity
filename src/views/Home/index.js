@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import BigCalendar from "react-big-calendar";
 import moment from "moment";
 
 import Modal from "../../components/Modal";
-
-import ModalContext from "../../context/ModalContext";
+import EventContext from "../../context/EventContext";
 
 import "../../styles/react-big-calendar.css";
 import {
@@ -16,36 +15,22 @@ import {
 const localizer = BigCalendar.momentLocalizer(moment);
 
 function Home() {
-  const initialEvents = JSON.parse(
-    window.localStorage.getItem("events") || "[]"
+  const { events, handleAddEvent, handleDeleteEvents } = useContext(
+    EventContext
   );
-  const [events, setEvents] = useState(initialEvents);
-
-  const { handleOpenModal } = useContext(ModalContext);
 
   const handleSelectSlot = ({ start, end }) => {
     const title = window.prompt("New Event name");
-    handleOpenModal();
+
     if (title) {
-      const newEvents = [
-        ...events,
-        {
-          start,
-          end,
-          title
-        }
-      ];
-
-      setEvents(newEvents);
-
-      window.localStorage.setItem("events", JSON.stringify(newEvents));
+      handleAddEvent({
+        start,
+        end,
+        title
+      });
     }
   };
 
-  const handleDeleteEvents = () => {
-    window.localStorage.clear();
-    window.location.reload();
-  };
   return (
     <HomeContainer>
       <Modal />
