@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import BigCalendar from "react-big-calendar";
 import moment from "moment";
 
@@ -10,24 +10,25 @@ import { HomeContainer } from "./style";
 const localizer = BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
 function Home() {
-  const events = [
-    {
-      id: 0,
-      title: "All Day Event very long title",
-      allDay: true,
-      start: new Date(2019, 4, 1),
-      end: new Date(2019, 4, 2)
-    },
-    {
-      id: 1,
-      title: "Long Event",
-      start: new Date(2015, 3, 7),
-      end: new Date(2015, 3, 10)
+  const [events, setEvents] = useState([]);
+
+  const handleSelectSlot = ({ start, end }) => {
+    const title = window.prompt("New Event name");
+    if (title) {
+      setEvents([
+        ...events,
+        {
+          start,
+          end,
+          title
+        }
+      ]);
     }
-  ];
+  };
   return (
     <HomeContainer>
       <BigCalendar
+        popup
         selectable
         localizer={localizer}
         events={events}
@@ -35,6 +36,7 @@ function Home() {
         scrollToTime={new Date(1970, 1, 1, 6)}
         defaultDate={new Date()}
         onSelectEvent={event => alert(event.title)}
+        onSelectSlot={handleSelectSlot}
       />
     </HomeContainer>
   );
