@@ -4,12 +4,14 @@ import moment from "moment";
 
 import Modal from "../../components/Modal";
 import EventContext from "../../context/EventContext";
+import ModalContext from "../../context/ModalContext";
 
 import "../../styles/react-big-calendar.css";
 import {
   HomeContainer,
-  DeleteButtonContainer,
-  DeleteEventsButton
+  ButtonsContainer,
+  DeleteEventsButton,
+  AddEventButton
 } from "./style";
 
 const localizer = BigCalendar.momentLocalizer(moment);
@@ -18,6 +20,8 @@ function Home() {
   const { events, handleAddEvent, handleDeleteEvents } = useContext(
     EventContext
   );
+
+  const { handleOpenModal } = useContext(ModalContext);
 
   const handleSelectSlot = ({ start, end }) => {
     const title = window.prompt("New Event name");
@@ -34,11 +38,12 @@ function Home() {
   return (
     <HomeContainer>
       <Modal />
-      <DeleteButtonContainer>
+      <ButtonsContainer>
+        <AddEventButton onClick={handleOpenModal}>Add Event</AddEventButton>
         <DeleteEventsButton onClick={handleDeleteEvents}>
           Delete Events
         </DeleteEventsButton>
-      </DeleteButtonContainer>
+      </ButtonsContainer>
       <BigCalendar
         popup
         selectable

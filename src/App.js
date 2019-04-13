@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { GlobalStyle } from "./styles/reset.css";
 import Routes from "./routes";
 import ModalContext from "./context/ModalContext";
@@ -10,7 +11,16 @@ function App() {
   const initialEvents = JSON.parse(
     window.localStorage.getItem("events") || "[]"
   );
-  const [events, setEvents] = useState(initialEvents);
+
+  const parseDateInitialEvents =
+    initialEvents &&
+    initialEvents.map(event => {
+      event.start = new Date(event.start);
+      event.end = new Date(event.end);
+      return event;
+    });
+
+  const [events, setEvents] = useState(parseDateInitialEvents);
 
   const handleOpenModal = () => {
     setModalIsOpen(true);
@@ -37,7 +47,11 @@ function App() {
       value={{ modalIsOpen, handleOpenModal, handleCloseModal }}
     >
       <EventContext.Provider
-        value={{ events, handleAddEvent, handleDeleteEvents }}
+        value={{
+          events,
+          handleAddEvent,
+          handleDeleteEvents
+        }}
       >
         <GlobalStyle />
         <Routes />

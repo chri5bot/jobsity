@@ -5,7 +5,7 @@ export const HomeContainer = styled.div`
   padding: 200px;
 `;
 
-export const DeleteButtonContainer = styled.div`
+export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,11 +13,25 @@ export const DeleteButtonContainer = styled.div`
 `;
 
 export const DeleteEventsButton = styled.button`
-  color: #373a3c;
+  color: white;
   margin: 0;
   text-align: center;
   vertical-align: middle;
-  background: none;
+  background-color: red;
+  background-image: none;
+  border: 1px solid #ccc;
+  padding: 0.375rem 1rem;
+  border-radius: 4px;
+  line-height: normal;
+  white-space: nowrap;
+`;
+
+export const AddEventButton = styled.button`
+  color: white;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  background-color: blue;
   background-image: none;
   border: 1px solid #ccc;
   padding: 0.375rem 1rem;
