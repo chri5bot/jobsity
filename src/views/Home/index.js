@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import BigCalendar from "react-big-calendar";
 import moment from "moment";
+
+import Modal from "../../components/Modal";
+
+import ModalContext from "../../context/ModalContext";
 
 import "../../styles/react-big-calendar.css";
 import {
@@ -17,8 +21,11 @@ function Home() {
   );
   const [events, setEvents] = useState(initialEvents);
 
+  const { handleOpenModal } = useContext(ModalContext);
+
   const handleSelectSlot = ({ start, end }) => {
     const title = window.prompt("New Event name");
+    handleOpenModal();
     if (title) {
       const newEvents = [
         ...events,
@@ -41,6 +48,7 @@ function Home() {
   };
   return (
     <HomeContainer>
+      <Modal />
       <DeleteButtonContainer>
         <DeleteEventsButton onClick={handleDeleteEvents}>
           Delete Events
